@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+if (!isset($_SESSION['unique_id'])) {
+    header("location: login.php");
+}
+?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dollars</title>
-
-    <link rel="shortcut icon" href="img/Dollars.png" type="image/x-icon">
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-</head>
+<?php include_once "header.php"; ?>
 <style>
     .chat-box::-webkit-scrollbar {
         width: 0px;
@@ -93,67 +87,37 @@
     <div class="wrapper">
         <section class="chat">
             <header style="display: flex;align-items:center;padding:18px 30px;">
-                <a href="#" class="back-icon" style="font-size: 18px;color:#333;"><i class="fas fa-arrow-left"></i></a>
-                <img src="img/3.jpg" alt="" style="height: 45px;margin:0 15px;">
+                <?php
+                include_once "php/config.php";
+                $user_id = mysqli_real_escape_string($conn, $_GET['user_id']);
+                $sql = mysqli_query($conn, "SELECT * FROM users WHERE unique_id = {$user_id}");
+
+                if (mysqli_num_rows($sql) > 0) {
+                    $row = mysqli_fetch_assoc($sql);
+                }
+                ?>
+                <a href="users.php" class="back-icon" style="font-size: 18px;color:#333;"><i class="fas fa-arrow-left"></i></a>
+                <img src="php/images/<?= $row['img'] ?>" alt="" style="height: 45px;margin:0 15px;">
                 <div class="details">
-                    <span style="font-size: 17px;font: weight 500px;">Aditya Sulis</span>
-                    <p>Active Now</p>
+                    <span style="font-size: 17px;font: weight 500px;"><?= $row['fname'] . " " . $row['lname'] ?></span>
+                    <p><?= $row['status'] ?></p>
                 </div>
             </header>
             <div class="chat-box" style="height: 500px;background:#f7f7f7;padding:10px 30px 20px 30px;box-shadow :inset 0 32px 32px -32px rgb(0 0 0 / 5%),inset 0 -32px 32px -32px rgb(0 0 0 / 5%);overflow-y:auto;">
-                <div class="chat outgoing" style="display:flex;">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, placeat.</p>
-                    </div>
-                </div>
-                <div class="chat incoming">
-                    <img src="img/2.jpg" alt="">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div>
-                </div>
-                <div class="chat outgoing" style="display:flex;">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, placeat.</p>
-                    </div>
-                </div>
-                <div class="chat incoming">
-                    <img src="img/2.jpg" alt="">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div>
-                </div>
-                <div class="chat outgoing" style="display:flex;">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, placeat.</p>
-                    </div>
-                </div>
-                <div class="chat incoming">
-                    <img src="img/2.jpg" alt="">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div>
-                </div>
-                <div class="chat outgoing" style="display:flex;">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis, placeat.</p>
-                    </div>
-                </div>
-                <div class="chat incoming">
-                    <img src="img/2.jpg" alt="">
-                    <div class="details">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-                    </div>
-                </div>
+
             </div>
             <form action="#" class="typing-area">
-                <input type="text" placeholder="Type a message ...">
+                <input type="text" name="outgoing_id" value="<?= $_SESSION['unique_id']; ?>" hidden>
+                <input type="text" name="incoming_id" value="<?= $user_id; ?>" hidden>
+                <input type="text" name="message" class="input-field" placeholder="Type a message ...">
                 <button>
                     <i class="fab fa-telegram-plane"></i>
                 </button>
             </form>
         </section>
     </div>
+
+    <script src="js/chat.js"></script>
 </body>
 
 </html>
