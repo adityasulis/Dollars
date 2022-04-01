@@ -9,8 +9,13 @@ if (!empty($email) && !empty($password)) {
     $sql = mysqli_query($conn, "SELECT * FROM users WHERE email = '{$email}' AND password = '{$password}'");
     if (mysqli_num_rows($sql) > 0) { //if match
         $row = mysqli_fetch_assoc($sql);
-        $_SESSION['unique_id'] = $row['unique_id']; //session dengan unique id
-        echo "success";
+        $status = "Active now";
+        //update user active when login
+        $sql2 = mysqli_query($conn, "UPDATE users SET status = '{$status}' WHERE unique_id = {$row['unique_id']}");
+        if ($sql) {
+            $_SESSION['unique_id'] = $row['unique_id']; //session dengan unique id
+            echo "success";
+        }
     } else {
         echo "Incorrect email or password";
     }

@@ -117,7 +117,7 @@ if (!isset($_SESSION['unique_id'])) {
         </section>
     </div>
 
-    <script src="js/chat.js"></script>
+    <script type="text/javascript" src="js/chat.js"></script>
 </body>
 
 </html>

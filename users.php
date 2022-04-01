@@ -45,6 +45,16 @@ if (!isset($_SESSION['unique_id'])) {
     .users .search button.active i::before {
         content: "\f00d";
     }
+
+    .users-list a .status-dot {
+        font-size: 12px;
+        color: #008000;
+    }
+
+    /* class chat offline */
+    .users-list a .status-dot.offline {
+        color: #C0C0C0;
+    }
 </style>
 
 <body>
@@ -66,7 +76,7 @@ if (!isset($_SESSION['unique_id'])) {
                         <p><?= $row['status'] ?></p>
                     </div>
                 </div>
-                <a href="#" class="logout">Logout</a>
+                <a href="php/logout.php?logout_id=<?= $row['unique_id'] ?>" class="logout">Logout</a>
             </header>
             <div class="search">
                 <span class="text">Select an user to start chat</span>
